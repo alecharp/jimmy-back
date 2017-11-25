@@ -1,0 +1,13 @@
+server:
+  compression.enabled: true
+
+---
+
+spring.profiles: prod
+
+---
+
+spring.profiles: dev
+server.port: 8181
+logging.level:
+  fr.alecharp: DEBUG
