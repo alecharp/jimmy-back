@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Jimmy, Adrien Lecharpentier and others
+ * Copyright 2017 Adrien Lecharpentier
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.alecharp.jimmy.back;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package fr.alecharp.jimmy.back.user;
 
-@SpringBootApplication
-public class JimmyBackApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(JimmyBackApplication.class, args);
-    }
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+interface UsersRepository extends CrudRepository<User, String> {
+    boolean existsByEmail(String email);
 }
