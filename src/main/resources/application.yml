@@ -1,9 +1,18 @@
 server:
   compression.enabled: true
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}/${POSTGRES_DB:jimmy}
+  jpa:
+    generate-ddl: true
 
 ---
 
 spring.profiles: prod
+spring.jpa.hibernate.ddl-auto: update
 
 ---
 
@@ -11,3 +20,13 @@ spring.profiles: dev
 server.port: 8181
 logging.level:
   fr.alecharp: DEBUG
+spring:
+  datasource:
+    username: jimmy
+    password: jimmy
+  jpa:
+    hibernate.ddl-auto: create-drop
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      type: trace
