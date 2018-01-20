@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package fr.alecharp.jimmy.back.user;
+package fr.alecharp.jimmy.back.account;
 
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-class UsersService {
-    private final UsersRepository usersRepository;
+class AccountService {
+    private final AccountRepository accountRepository;
 
-    UsersService(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
-    Optional<User> save(User user) {
-        return Optional.of(usersRepository.save(user));
+    Optional<Account> save(Account account) {
+        return Optional.of(accountRepository.save(account));
     }
 
-    Optional<User> byId(String id) {
-        return usersRepository.findById(id);
+    Optional<Account> byId(String id) {
+        return accountRepository.findById(id);
     }
 
-    Iterable<User> all() {
-        return usersRepository.findAll();
+    Iterable<Account> all() {
+        return accountRepository.findAll();
     }
 
     boolean knows(String email) {
-        return usersRepository.existsByEmail(email);
+        return accountRepository.existsByEmail(email);
     }
 }

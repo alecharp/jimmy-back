@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.alecharp.jimmy.back.user;
+package fr.alecharp.jimmy.back.account;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,30 +27,30 @@ import reactor.core.publisher.Mono;
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE
 )
-public class UsersAPI {
-    private final UsersService usersService;
+public class AccountAPI {
+    private final AccountService usersService;
 
-    public UsersAPI(UsersService usersService) {
+    public AccountAPI(AccountService usersService) {
         this.usersService = usersService;
     }
 
     @GetMapping
-    public Flux<User> all() {
+    public Flux<Account> all() {
         return Flux.fromIterable(usersService.all());
     }
 
     @GetMapping(value = "/{id}")
-    public Mono<User> one(@PathVariable String id) {
+    public Mono<Account> one(@PathVariable String id) {
         return Mono.justOrEmpty(usersService.byId(id));
     }
 
     @PostMapping
-    public Mono<User> create(@RequestBody User user) {
-        return Mono.justOrEmpty(usersService.save(user));
+    public Mono<Account> create(@RequestBody Account account) {
+        return Mono.justOrEmpty(usersService.save(account));
     }
 
     @PostMapping(value = "/{id}")
-    public Mono<User> update(@PathVariable String id, @RequestBody User user) {
-        return id.equals(user.getId()) ? Mono.justOrEmpty(usersService.save(user)) : Mono.empty();
+    public Mono<Account> update(@PathVariable String id, @RequestBody Account account) {
+        return id.equals(account.getId()) ? Mono.justOrEmpty(usersService.save(account)) : Mono.empty();
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.alecharp.jimmy.back.user;
+package fr.alecharp.jimmy.back.account;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,8 +23,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity(name = "users")
-public class User {
+@Entity
+public class Account {
 
     @Id
     @GeneratedValue(generator = "uuid2")

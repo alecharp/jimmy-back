@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package fr.alecharp.jimmy.back.user;
+package fr.alecharp.jimmy.back.account;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-interface UsersRepository extends CrudRepository<User, String> {
+interface AccountRepository extends CrudRepository<Account, String> {
     boolean existsByEmail(String email);
 }
