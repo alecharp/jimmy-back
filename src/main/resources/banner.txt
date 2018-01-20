@@ -1,0 +1,26 @@
+
+
+          JJJJJJJJJJJ iiii
+          J:::::::::Ji::::i
+          J:::::::::J iiii
+          JJ:::::::JJ
+            J:::::J iiiiiii    mmmmmmm    mmmmmmm      mmmmmmm    mmmmmmm yyyyyyy           yyyyyyy
+            J:::::J i:::::i  mm:::::::m  m:::::::mm  mm:::::::m  m:::::::mmy:::::y         y:::::y
+            J:::::J  i::::i m::::::::::mm::::::::::mm::::::::::mm::::::::::my:::::y       y:::::y
+            J:::::j  i::::i m::::::::::::::::::::::mm::::::::::::::::::::::m y:::::y     y:::::y
+            J:::::J  i::::i m:::::mmm::::::mmm:::::mm:::::mmm::::::mmm:::::m  y:::::y   y:::::y
+JJJJJJJ     J:::::J  i::::i m::::m   m::::m   m::::mm::::m   m::::m   m::::m   y:::::y y:::::y
+J:::::J     J:::::J  i::::i m::::m   m::::m   m::::mm::::m   m::::m   m::::m    y:::::y:::::y
+J::::::J   J::::::J  i::::i m::::m   m::::m   m::::mm::::m   m::::m   m::::m     y:::::::::y
+J:::::::JJJ:::::::J i::::::im::::m   m::::m   m::::mm::::m   m::::m   m::::m      y:::::::y
+ JJ:::::::::::::JJ  i::::::im::::m   m::::m   m::::mm::::m   m::::m   m::::m       y:::::y
+   JJ:::::::::JJ    i::::::im::::m   m::::m   m::::mm::::m   m::::m   m::::m      y:::::y
+     JJJJJJJJJ      iiiiiiiimmmmmm   mmmmmm   mmmmmmmmmmmm   mmmmmm   mmmmmm     y:::::y
+                                                                                y:::::y
+                                                                               y:::::y
+                                                                              y:::::y
+                                                                             y:::::y
+                                                                            yyyyyyy
+
+${Ansi.GREEN} :: UploadSite :: ${Ansi.DEFAULT} ${application.formatted-version}
+${Ansi.GREEN} :: Spring Boot :: ${Ansi.DEFAULT}${spring-boot.formatted-version}

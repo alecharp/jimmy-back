@@ -3,12 +3,11 @@ MAINTAINER Adrien Lecharpentier <me@alecharp.fr>
 
 RUN adduser -h /var/jimmy -D -u 1000 jimmy jimmy
 COPY --chown=jimmy:jimmy src/main/docker/docker-entrypoint.sh /var/jimmy/docker-entrypoint.sh
-RUN chmod 700 /var/jimmy/docker-entrypoint.sh
 
 USER jimmy
-ENV SPRING_PROFILES_ACTIVE dev
+ENV SPRING_PROFILES_ACTIVE prod
 
 EXPOSE 8080
-ENTRYPOINT ["/var/jimmy/docker-entrypoint.sh"]
+ENTRYPOINT ["sh", "/var/jimmy/docker-entrypoint.sh"]
 
 COPY --chown=jimmy:jimmy target/jimmy-back.jar /var/jimmy/jimmy-back.jar

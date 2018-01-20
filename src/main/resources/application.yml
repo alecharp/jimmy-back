@@ -8,11 +8,12 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}/${POSTGRES_DB:jimmy}
   jpa:
     generate-ddl: true
+    hibernate.ddl-auto: update
 
 ---
 
 spring.profiles: prod
-spring.jpa.hibernate.ddl-auto: update
+server.port: 8080
 
 ---
 
@@ -25,7 +26,6 @@ spring:
     username: jimmy
     password: jimmy
   jpa:
-    hibernate.ddl-auto: create-drop
     properties.hibernate:
       show_sql: true
       format_sql: true
