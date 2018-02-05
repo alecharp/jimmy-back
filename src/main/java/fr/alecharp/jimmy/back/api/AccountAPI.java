@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package fr.alecharp.jimmy.back.account;
+package fr.alecharp.jimmy.back.api;
 
+import fr.alecharp.jimmy.back.service.AccountService;
+import fr.alecharp.jimmy.back.model.Account;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
@@ -45,12 +49,12 @@ public class AccountAPI {
     }
 
     @PostMapping
-    public Mono<Account> create(@RequestBody Account account) {
+    public Mono<Account> create(@RequestBody @Valid Account account) {
         return Mono.justOrEmpty(usersService.save(account));
     }
 
     @PostMapping(value = "/{id}")
-    public Mono<Account> update(@PathVariable String id, @RequestBody Account account) {
+    public Mono<Account> update(@PathVariable String id, @RequestBody @Valid Account account) {
         return id.equals(account.getId()) ? Mono.justOrEmpty(usersService.save(account)) : Mono.empty();
     }
 }
