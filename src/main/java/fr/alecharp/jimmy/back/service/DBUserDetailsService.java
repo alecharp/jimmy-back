@@ -17,18 +17,18 @@
 package fr.alecharp.jimmy.back.service;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-public class DBUserDetailsService implements UserDetailsService {
+public class DBUserDetailsService implements ReactiveUserDetailsService {
     private final AccountService accountService;
 
     public DBUserDetailsService(AccountService accountService) {
@@ -36,21 +36,22 @@ public class DBUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return accountService.findByEmail(username)
-              .map(
-                    account -> new User(
-                          account.getEmail(),
-                          account.getPassword(),
-                          account.isActivated(),
-                          true,
-                          true,
-                          true,
-                          account.getRoles().stream().map(
-                                role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList()
+    public Mono<UserDetails> findByUsername(String username) {
+        return Mono.justOrEmpty(
+              accountService.findByEmail(username)
+                    .map(account ->
+                          new User(
+                                account.getEmail(),
+                                account.getPassword(),
+                                account.isActivated(),
+                                true,
+                                true,
+                                true,
+                                account.getRoles().stream().map(
+                                      role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList()
+                                )
                           )
                     )
-              )
-              .orElseThrow(() -> new UsernameNotFoundException("Account " + username + " not found"));
+        );
     }
 }

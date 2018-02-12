@@ -27,7 +27,7 @@ import java.util.Set;
 
 @Entity
 @Table(
-      name = "account",
+      name = "accounts",
       uniqueConstraints = @UniqueConstraint(columnNames = "email")
 )
 public class Account {
@@ -108,7 +108,7 @@ public class Account {
         return registrationDate;
     }
 
-    public Account setRegistrationDate(@NotEmpty ZonedDateTime registrationDate) {
+    public Account setRegistrationDate(ZonedDateTime registrationDate) {
         this.registrationDate = registrationDate;
         return this;
     }
