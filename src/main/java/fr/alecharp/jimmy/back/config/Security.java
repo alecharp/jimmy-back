@@ -25,12 +25,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
-import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
 public class Security {
     @Bean
-    SecurityWebFilterChain webFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain webFilterChain(ServerHttpSecurity http) {
         //@formatter:off
         return http
           .authorizeExchange()
@@ -41,21 +40,9 @@ public class Security {
           .and()
             .formLogin()
             .loginPage("/api/auth/login")
-            .authenticationFailureHandler((webFilterExchange, exception) -> {
-                exception.printStackTrace(System.out);
-                return Mono.empty();
-            })
-            .authenticationSuccessHandler((webFilterExchange, authentication) -> {
-                System.out.println(authentication);
-                return Mono.empty();
-            })
           .and()
             .logout()
             .logoutUrl("/api/auth/logout")
-            .logoutSuccessHandler((exchange, authentication) -> {
-                exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
-                return Mono.empty();
-            })
           .and()
             .csrf()
               .csrfTokenRepository(new WebSessionServerCsrfTokenRepository())
