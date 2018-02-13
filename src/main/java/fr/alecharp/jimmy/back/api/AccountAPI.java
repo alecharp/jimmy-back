@@ -16,8 +16,8 @@
 
 package fr.alecharp.jimmy.back.api;
 
-import fr.alecharp.jimmy.back.service.AccountService;
 import fr.alecharp.jimmy.back.model.Account;
+import fr.alecharp.jimmy.back.service.AccountService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -46,11 +46,6 @@ public class AccountAPI {
     @GetMapping(value = "/{id}")
     public Mono<Account> one(@PathVariable String id) {
         return Mono.justOrEmpty(usersService.byId(id));
-    }
-
-    @PostMapping
-    public Mono<Account> create(@RequestBody @Valid Account account) {
-        return Mono.justOrEmpty(usersService.save(account));
     }
 
     @PostMapping(value = "/{id}")
