@@ -24,6 +24,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
 import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
@@ -56,8 +57,10 @@ public class Security {
                 return Mono.empty();
             })
           .and()
-            .csrf().disable()
-          .build();
+            .csrf()
+              .csrfTokenRepository(new WebSessionServerCsrfTokenRepository())
+          .and()
+            .build();
         //@formatter:on
     }
 
