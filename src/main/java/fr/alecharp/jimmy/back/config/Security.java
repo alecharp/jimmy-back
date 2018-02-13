@@ -17,8 +17,8 @@
 package fr.alecharp.jimmy.back.config;
 
 import fr.alecharp.jimmy.back.model.Role;
+import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +33,7 @@ public class Security {
         //@formatter:off
         return http
           .authorizeExchange()
+            .matchers(EndpointRequest.to("info", "health")).permitAll()
             .pathMatchers("/api/auth/register").permitAll()
             .pathMatchers("/api/auth/logout").authenticated()
             .anyExchange().hasRole(Role.USER.name())

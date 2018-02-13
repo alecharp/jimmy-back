@@ -9,6 +9,11 @@ spring:
   jpa:
     generate-ddl: true
     hibernate.ddl-auto: update
+management:
+  endpoints:
+    web.base-path: /api/actuator
+  endpoint:
+    health.cache.time-to-live: 15s
 
 ---
 
