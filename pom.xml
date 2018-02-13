@@ -24,7 +24,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>jimmy Back</name>
+    <name>Jimmy :: Back</name>
     <inceptionYear>2017</inceptionYear>
 
     <organization>
@@ -63,6 +63,7 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
