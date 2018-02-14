@@ -16,6 +16,7 @@
 
 package fr.alecharp.jimmy.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -86,6 +87,7 @@ public class Account {
         return this;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
