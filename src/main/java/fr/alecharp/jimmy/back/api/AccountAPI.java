@@ -61,7 +61,10 @@ public class AccountAPI {
 
     @GetMapping(value = "/me")
     @PreAuthorize(value = "isAuthenticated()")
-    public Mono<Account> me(@AuthenticationPrincipal Principal principal) {
-        return Mono.justOrEmpty(usersService.findByEmail(principal.getName()));
+    public Mono<Account> me(@AuthenticationPrincipal Mono<Principal> principal) {
+        return principal
+              .map(Principal::getName)
+              .map(usersService::findByEmail)
+              .flatMap(Mono::justOrEmpty);
     }
 }
