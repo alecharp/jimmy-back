@@ -49,7 +49,7 @@ public class DBUserDetailsService implements ReactiveUserDetailsService {
                                 true,
                                 true,
                                 account.getRoles().stream().map(
-                                      role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList()
+                                      role -> new SimpleGrantedAuthority("ROLE_" + role.name())).collect(Collectors.toList()
                                 )
                           )
                     )
