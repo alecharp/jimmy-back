@@ -19,11 +19,14 @@ package fr.alecharp.jimmy.back.api;
 import fr.alecharp.jimmy.back.model.Account;
 import fr.alecharp.jimmy.back.service.AccountService;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(
@@ -39,17 +42,26 @@ public class AccountAPI {
     }
 
     @GetMapping
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public Flux<Account> all() {
         return Flux.fromIterable(usersService.all());
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public Mono<Account> one(@PathVariable String id) {
         return Mono.justOrEmpty(usersService.byId(id));
     }
 
     @PostMapping(value = "/{id}")
+    @PreAuthorize(value = "isAuthenticated()")
     public Mono<Account> update(@PathVariable String id, @RequestBody @Valid Account account) {
         return id.equals(account.getId()) ? Mono.justOrEmpty(usersService.save(account)) : Mono.empty();
+    }
+
+    @GetMapping(value = "/me")
+    @PreAuthorize(value = "isAuthenticated()")
+    public Mono<Account> me(@AuthenticationPrincipal Principal principal) {
+        return Mono.justOrEmpty(usersService.findByEmail(principal.getName()));
     }
 }
