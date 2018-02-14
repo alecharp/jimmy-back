@@ -38,7 +38,8 @@ public class DBUserDetailsService implements ReactiveUserDetailsService {
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         return Mono.justOrEmpty(
-              accountService.findByEmail(username)
+              accountService
+                    .findByEmail(username)
                     .map(account ->
                           new User(
                                 account.getEmail(),

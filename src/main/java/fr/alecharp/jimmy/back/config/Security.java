@@ -16,15 +16,15 @@
 
 package fr.alecharp.jimmy.back.config;
 
-import fr.alecharp.jimmy.back.model.Role;
 import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
+import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
 public class Security {
@@ -36,17 +36,34 @@ public class Security {
             .matchers(EndpointRequest.to("info", "health")).permitAll()
             .pathMatchers("/api/auth/register").permitAll()
             .pathMatchers("/api/auth/logout").authenticated()
-            .anyExchange().hasRole(Role.USER.name())
+            .anyExchange().authenticated()
           .and()
             .formLogin()
             .loginPage("/api/auth/login")
+            .authenticationSuccessHandler((webFilterExchange, authentication) -> {
+                webFilterExchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+                return Mono.empty();
+            })
+            .authenticationFailureHandler((webFilterExchange, exception) -> {
+                webFilterExchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return Mono.empty();
+            })
+          .and()
+            .exceptionHandling()
+              .authenticationEntryPoint((exchange, e) -> {
+                  exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                  return Mono.empty();
+              })
           .and()
             .logout()
             .logoutUrl("/api/auth/logout")
+            .logoutSuccessHandler((exchange, authentication) -> {
+                exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+                return Mono.empty();
+            })
           .and()
             .csrf()
-              .csrfTokenRepository(new WebSessionServerCsrfTokenRepository())
-          .and()
+              .disable()
             .build();
         //@formatter:on
     }
