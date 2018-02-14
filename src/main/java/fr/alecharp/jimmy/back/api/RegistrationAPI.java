@@ -18,7 +18,6 @@ package fr.alecharp.jimmy.back.api;
 
 import fr.alecharp.jimmy.back.model.Account;
 import fr.alecharp.jimmy.back.service.AccountService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +38,6 @@ public class RegistrationAPI {
     }
 
     @PostMapping(value = "/register")
-    @PreAuthorize(value = "permitAll()")
     public Mono<Account> registration(@RequestBody @Valid Account account) {
         return Mono.justOrEmpty(accountService.create(account));
     }
