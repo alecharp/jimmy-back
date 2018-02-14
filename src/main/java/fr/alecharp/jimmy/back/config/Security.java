@@ -36,7 +36,6 @@ public class Security {
         return http
           .authorizeExchange()
             .matchers(EndpointRequest.to("info", "health")).permitAll()
-            .pathMatchers("/api/auth/logout").authenticated()
             .anyExchange().authenticated()
           .and()
             .formLogin()

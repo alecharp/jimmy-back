@@ -39,7 +39,7 @@ public class RegistrationAPI {
     }
 
     @PostMapping(value = "/register")
-    @PreAuthorize(value = "isAnonymous()")
+    @PreAuthorize(value = "permitAll()")
     public Mono<Account> registration(@RequestBody @Valid Account account) {
         return Mono.justOrEmpty(accountService.create(account));
     }

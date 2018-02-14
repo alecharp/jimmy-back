@@ -54,7 +54,7 @@ public class AccountAPI {
     }
 
     @PostMapping(value = "/{id}")
-    @PreAuthorize(value = "isAuthenticated()")
+    @PreAuthorize(value = "isAuthenticated() && authentication.name == #account.email")
     public Mono<Account> update(@PathVariable String id, @RequestBody @Valid Account account) {
         return id.equals(account.getId()) ? Mono.justOrEmpty(usersService.save(account)) : Mono.empty();
     }
