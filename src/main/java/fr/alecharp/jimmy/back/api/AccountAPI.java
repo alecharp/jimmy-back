@@ -16,11 +16,13 @@
 
 package fr.alecharp.jimmy.back.api;
 
+import fr.alecharp.jimmy.back.api.model.AccountUpdateRequest;
 import fr.alecharp.jimmy.back.model.Account;
 import fr.alecharp.jimmy.back.service.AccountService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -53,10 +55,15 @@ public class AccountAPI {
         return Mono.justOrEmpty(usersService.byId(id));
     }
 
-    @PostMapping(value = "/{id}")
+    @PutMapping(value = "/{id}")
     @PreAuthorize(value = "isAuthenticated() && authentication.name == #account.email")
-    public Mono<Account> update(@PathVariable String id, @RequestBody @Valid Account account) {
-        return id.equals(account.getId()) ? Mono.justOrEmpty(usersService.save(account)) : Mono.empty();
+    public Mono<Account> update(@RequestBody @Valid AccountUpdateRequest account) {
+        return Mono.justOrEmpty(
+              usersService.findByEmail(account.getEmail())
+                    .map(user -> user.setFirstName(account.getFirstName()).setLastName(account.getLastName()))
+                    .flatMap(usersService::save)
+                    .orElseThrow(() -> new UsernameNotFoundException("No account for " + account.getEmail()))
+        );
     }
 
     @GetMapping(value = "/me")
