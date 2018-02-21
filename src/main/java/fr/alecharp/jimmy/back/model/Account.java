@@ -16,7 +16,6 @@
 
 package fr.alecharp.jimmy.back.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,7 +31,6 @@ import java.util.Set;
       uniqueConstraints = @UniqueConstraint(columnNames = "email")
 )
 public class Account {
-
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -87,7 +85,6 @@ public class Account {
         return this;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }

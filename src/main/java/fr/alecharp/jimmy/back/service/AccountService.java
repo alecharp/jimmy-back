@@ -40,6 +40,14 @@ public class AccountService {
         return Optional.of(accountRepository.save(account));
     }
 
+    public Optional<Account> updatePassword(Account account) {
+        return Optional.of(accountRepository.save(encrypt(account)));
+    }
+
+    private Account encrypt(Account account) {
+        return account.setPassword(passwordEncoder.encode(account.getPassword()));
+    }
+
     public Optional<Account> byId(String id) {
         return accountRepository.findById(id);
     }
@@ -54,8 +62,7 @@ public class AccountService {
 
     public Optional<Account> create(Account account) {
         return this.save(
-              account
-                    .setPassword(passwordEncoder.encode(account.getPassword()))
+              encrypt(account)
                     .setRoles(Role.USER)
                     .setRegistrationDate(ZonedDateTime.now(ZoneOffset.UTC))
                     .setActivated(false)

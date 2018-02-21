@@ -16,6 +16,7 @@
 
 package fr.alecharp.jimmy.back.api;
 
+import fr.alecharp.jimmy.back.api.model.AccountPasswordRequest;
 import fr.alecharp.jimmy.back.api.model.AccountUpdateRequest;
 import fr.alecharp.jimmy.back.model.Account;
 import fr.alecharp.jimmy.back.service.AccountService;
@@ -46,24 +47,7 @@ public class AccountAPI {
     @GetMapping
     @PreAuthorize(value = "hasRole('ADMIN')")
     public Flux<Account> all() {
-        return Flux.fromIterable(usersService.all());
-    }
-
-    @GetMapping(value = "/{id}")
-    @PreAuthorize(value = "hasRole('ADMIN')")
-    public Mono<Account> one(@PathVariable String id) {
-        return Mono.justOrEmpty(usersService.byId(id));
-    }
-
-    @PutMapping(value = "/{id}")
-    @PreAuthorize(value = "isAuthenticated() && authentication.name == #account.email")
-    public Mono<Account> update(@RequestBody @Valid AccountUpdateRequest account) {
-        return Mono.justOrEmpty(
-              usersService.findByEmail(account.getEmail())
-                    .map(user -> user.setFirstName(account.getFirstName()).setLastName(account.getLastName()))
-                    .flatMap(usersService::save)
-                    .orElseThrow(() -> new UsernameNotFoundException("No account for " + account.getEmail()))
-        );
+        return Flux.fromIterable(usersService.all()).map(account -> account.setPassword(null));
     }
 
     @GetMapping(value = "/me")
@@ -72,6 +56,34 @@ public class AccountAPI {
         return principal
               .map(Principal::getName)
               .map(usersService::findByEmail)
+              .flatMap(Mono::justOrEmpty)
+              .map(account -> account.setPassword(null));
+    }
+
+    @PutMapping(value = "/me")
+    @PreAuthorize(value = "isAuthenticated()")
+    public Mono<Account> update(@RequestBody AccountUpdateRequest account,
+                                @AuthenticationPrincipal Mono<Principal> principal) {
+        return principal
+              .map(Principal::getName)
+              .map(usersService::findByEmail)
+              .flatMap(Mono::justOrEmpty)
+              .map(user -> user.setFirstName(account.getFirstName()).setLastName(account.getLastName()))
+              .map(usersService::save)
+              .flatMap(Mono::justOrEmpty)
+              .map(user -> user.setPassword(null));
+    }
+
+    @PutMapping(value = "/me/password")
+    @PreAuthorize(value = "isAuthenticated()")
+    public Mono<Account> updatePassword(@RequestBody AccountPasswordRequest password,
+                                        @AuthenticationPrincipal Mono<Principal> principal) {
+        return principal
+              .map(Principal::getName)
+              .map(usersService::findByEmail)
+              .flatMap(Mono::justOrEmpty)
+              .map(user -> user.setPassword(password.getPassword()))
+              .map(usersService::updatePassword)
               .flatMap(Mono::justOrEmpty);
     }
 }
