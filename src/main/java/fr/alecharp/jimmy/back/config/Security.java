@@ -36,6 +36,7 @@ public class Security {
         return http
           .authorizeExchange()
             .matchers(EndpointRequest.to("info", "health")).permitAll()
+            .matchers(EndpointRequest.to("metrics")).hasRole("ADMIN")
             .pathMatchers("/api/auth/register").permitAll()
             .anyExchange().authenticated()
           .and()
