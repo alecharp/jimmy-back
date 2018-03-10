@@ -1,5 +1,4 @@
-server:
-  compression.enabled: true
+server.compression.enabled: true
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -10,10 +9,17 @@ spring:
     generate-ddl: true
     hibernate.ddl-auto: update
 management:
-  endpoints:
-    web.base-path: /api/actuator
+  endpoints.web:
+    base-path: /api/actuator
+    exposure.include:
+      - "info"
+      - "health"
+      - "metrics"
   endpoint:
-    health.cache.time-to-live: 15s
+    health:
+      show-details: when_authorized
+      roles: "ADMIN"
+      cache.time-to-live: 15s
 
 ---
 
