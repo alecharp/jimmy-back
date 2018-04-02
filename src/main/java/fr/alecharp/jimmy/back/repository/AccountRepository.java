@@ -17,12 +17,17 @@
 package fr.alecharp.jimmy.back.repository;
 
 import fr.alecharp.jimmy.back.model.Account;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Repository
 public interface AccountRepository extends CrudRepository<Account, String> {
     Optional<Account> findByEmail(String email);
+
+    @Query("select a from Account a")
+    Stream<Account> streamAll();
 }

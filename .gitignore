@@ -6,5 +6,5 @@ target/
 *.ipr
 .idea/
 
-### Docker ###
+### Docker
 .docker-env

@@ -39,6 +39,6 @@ public class RegistrationAPI {
 
     @PostMapping(value = "/register")
     public Mono<Account> registration(@RequestBody @Valid Account account) {
-        return Mono.justOrEmpty(accountService.create(account));
+        return accountService.create(account);
     }
 }

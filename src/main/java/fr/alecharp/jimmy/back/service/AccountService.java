@@ -21,10 +21,11 @@ import fr.alecharp.jimmy.back.model.Role;
 import fr.alecharp.jimmy.back.repository.AccountRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -36,31 +37,31 @@ public class AccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<Account> save(Account account) {
-        return Optional.of(accountRepository.save(account));
+    public Mono<Account> save(Account account) {
+        return Mono.justOrEmpty(accountRepository.save(account));
     }
 
-    public Optional<Account> updatePassword(Account account) {
-        return Optional.of(accountRepository.save(encrypt(account)));
+    public Mono<Account> updatePassword(Account account) {
+        return Mono.justOrEmpty(accountRepository.save(encrypt(account)));
     }
 
     private Account encrypt(Account account) {
         return account.setPassword(passwordEncoder.encode(account.getPassword()));
     }
 
-    public Optional<Account> byId(String id) {
-        return accountRepository.findById(id);
+    public Mono<Account> byId(String id) {
+        return Mono.justOrEmpty(accountRepository.findById(id));
     }
 
-    public Iterable<Account> all() {
-        return accountRepository.findAll();
+    public Flux<Account> all() {
+        return Flux.fromStream(accountRepository.streamAll());
     }
 
-    public Optional<Account> findByEmail(String email) {
-        return accountRepository.findByEmail(email);
+    public Mono<Account> findByEmail(String email) {
+        return Mono.justOrEmpty(accountRepository.findByEmail(email));
     }
 
-    public Optional<Account> create(Account account) {
+    public Mono<Account> create(Account account) {
         return this.save(
               encrypt(account)
                     .setRoles(Role.USER)

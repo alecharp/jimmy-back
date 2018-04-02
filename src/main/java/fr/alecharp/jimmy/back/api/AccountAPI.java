@@ -47,7 +47,7 @@ public class AccountAPI {
     @GetMapping
     @PreAuthorize(value = "hasRole('ADMIN')")
     public Flux<Account> all() {
-        return Flux.fromIterable(usersService.all()).map(account -> account.setPassword(null));
+        return usersService.all().doOnNext(account -> account.setPassword(null));
     }
 
     @GetMapping(value = "/me")
@@ -55,9 +55,8 @@ public class AccountAPI {
     public Mono<Account> me(@AuthenticationPrincipal Mono<Principal> principal) {
         return principal
               .map(Principal::getName)
-              .map(usersService::findByEmail)
-              .flatMap(Mono::justOrEmpty)
-              .map(account -> account.setPassword(null));
+              .flatMap(usersService::findByEmail)
+              .doOnNext(account -> account.setPassword(null));
     }
 
     @PutMapping(value = "/me")
@@ -66,11 +65,9 @@ public class AccountAPI {
                                 @AuthenticationPrincipal Mono<Principal> principal) {
         return principal
               .map(Principal::getName)
-              .map(usersService::findByEmail)
-              .flatMap(Mono::justOrEmpty)
+              .flatMap(usersService::findByEmail)
               .map(user -> user.setFirstName(account.getFirstName()).setLastName(account.getLastName()))
-              .map(usersService::save)
-              .flatMap(Mono::justOrEmpty)
+              .flatMap(usersService::save)
               .map(user -> user.setPassword(null));
     }
 
@@ -80,10 +77,8 @@ public class AccountAPI {
                                         @AuthenticationPrincipal Mono<Principal> principal) {
         return principal
               .map(Principal::getName)
-              .map(usersService::findByEmail)
-              .flatMap(Mono::justOrEmpty)
+              .flatMap(usersService::findByEmail)
               .map(user -> user.setPassword(password.getPassword()))
-              .map(usersService::updatePassword)
-              .flatMap(Mono::justOrEmpty);
+              .flatMap(usersService::updatePassword);
     }
 }
