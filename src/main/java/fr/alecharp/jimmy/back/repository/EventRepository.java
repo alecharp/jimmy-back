@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Adrien Lecharpentier
+ * Copyright 2018 Adrien Lecharpentier
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,10 @@
 
 package fr.alecharp.jimmy.back.repository;
 
-import fr.alecharp.jimmy.back.model.Account;
-import org.springframework.data.jpa.repository.Query;
+import fr.alecharp.jimmy.back.model.Event;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
 @Repository
-public interface AccountRepository extends CrudRepository<Account, String> {
-    Optional<Account> findByEmail(String email);
-
-    @Query("select a from Account a")
-    Stream<Account> streamAll();
+public interface EventRepository extends CrudRepository<Event, String> {
 }

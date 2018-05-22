@@ -16,29 +16,34 @@
 
 package fr.alecharp.jimmy.back.api;
 
-import fr.alecharp.jimmy.back.model.Account;
-import fr.alecharp.jimmy.back.service.AccountService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import fr.alecharp.jimmy.back.model.Event;
+import fr.alecharp.jimmy.back.service.EventService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(
-      value = "/api/auth"
-)
-public class RegistrationAPI {
-    private final AccountService accountService;
+@RequestMapping(path = "/api/events")
+public class EventAPI {
+    private final EventService eventService;
 
-    public RegistrationAPI(AccountService accountService) {
-        this.accountService = accountService;
+    public EventAPI(EventService eventService) {
+        this.eventService = eventService;
     }
 
-    @PostMapping(value = "/register")
-    public Mono<Account> registration(@RequestBody @Valid Account account) {
-        return accountService.create(account);
+    @GetMapping(path = {"", "/"})
+    public List<Event> events() {
+        return eventService.getAllEvents();
+    }
+
+    @GetMapping(path = "/{id}")
+    public Optional<Event> event(@PathVariable String id) {
+        return eventService.byId(id);
     }
 }

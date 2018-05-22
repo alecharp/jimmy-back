@@ -20,6 +20,17 @@ management:
       show-details: when_authorized
       roles: "ADMIN"
       cache.time-to-live: 15s
+    metrics:
+      cache.time-to-live: 15s
+keycloak:
+  principal-attribute: preferred_username
+  auth-server-url: http://localhost:8082/auth
+  realm: jimmy
+  resource: jimmy-back
+  public-client: true
+  bearer-only: false
+  cors: true
+
 
 ---
 

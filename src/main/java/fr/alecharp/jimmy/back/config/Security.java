@@ -16,62 +16,51 @@
 
 package fr.alecharp.jimmy.back.config;
 
-import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
+import org.keycloak.adapters.KeycloakConfigResolver;
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import reactor.core.publisher.Mono;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-@EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
-public class Security {
-    @Bean
-    public SecurityWebFilterChain webFilterChain(ServerHttpSecurity http) {
+@Configuration
+@EnableWebSecurity
+public class Security extends KeycloakWebSecurityConfigurerAdapter {
+
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
         //@formatter:off
-        return http
-          .authorizeExchange()
-            .matchers(EndpointRequest.to("info", "health")).permitAll()
-            .matchers(EndpointRequest.to("metrics")).hasRole("ADMIN")
-            .pathMatchers("/api/auth/register").permitAll()
-            .anyExchange().authenticated()
-          .and()
-            .formLogin()
-            .loginPage("/api/auth/login")
-            .authenticationSuccessHandler((webFilterExchange, authentication) -> {
-                webFilterExchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
-                return Mono.empty();
-            })
-            .authenticationFailureHandler((webFilterExchange, exception) -> {
-                webFilterExchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return Mono.empty();
-            })
-          .and()
-            .exceptionHandling()
-              .authenticationEntryPoint((exchange, e) -> {
-                  exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-                  return Mono.empty();
-              })
-          .and()
-            .logout()
-            .logoutUrl("/api/auth/logout")
-            .logoutSuccessHandler((exchange, authentication) -> {
-                exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
-                return Mono.empty();
-            })
-          .and()
-            .csrf()
-              .disable()
-            .build();
+        http
+          .authorizeRequests()
+            .requestMatchers(EndpointRequest.to("info", "health")).permitAll()
+            .requestMatchers(EndpointRequest.to("metrics")).hasRole("ADMIN")
+            .anyRequest().authenticated()
+        ;
         //@formatter:on
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public KeycloakConfigResolver KeycloakConfigResolver() {
+        return new KeycloakSpringBootConfigResolver();
     }
 }

@@ -22,5 +22,5 @@ J:::::::JJJ:::::::J i::::::im::::m   m::::m   m::::mm::::m   m::::m   m::::m    
                                                                              y:::::y
                                                                             yyyyyyy
 
-${Ansi.GREEN} :: UploadSite :: ${Ansi.DEFAULT} ${application.formatted-version}
+${Ansi.GREEN} :: Jimmy :: ${Ansi.DEFAULT} ${application.formatted-version}
 ${Ansi.GREEN} :: Spring Boot :: ${Ansi.DEFAULT}${spring-boot.formatted-version}
