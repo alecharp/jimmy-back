@@ -19,11 +19,8 @@ package fr.alecharp.jimmy.back.service;
 import fr.alecharp.jimmy.back.model.Event;
 import fr.alecharp.jimmy.back.repository.EventRepository;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +33,9 @@ public class EventService {
     }
 
     public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+        List<Event> list = new ArrayList<>();
+        eventRepository.findAll().forEach(list::add);
+        return list;
     }
 
     public Optional<Event> byId(String id) {
