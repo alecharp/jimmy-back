@@ -23,12 +23,12 @@ management:
     metrics:
       cache.time-to-live: 15s
 keycloak:
+  realm: jimmy
   principal-attribute: preferred_username
   auth-server-url: ${KEYCLOAK_URL}
-  realm: jimmy
   resource: jimmy-back
   public-client: true
-  bearer-only: false
+  bearer-only: true
   cors: true
 
 ---
