@@ -46,7 +46,7 @@ public class Event {
           inverseJoinColumns = {@JoinColumn(name = "account_id")},
           uniqueConstraints = @UniqueConstraint(columnNames = {"event_id", "account_id"})
     )
-    private Set<Account> admins;
+    private Set<String> admins;
     @ManyToAny(metaColumn = @Column(name = "event_attendees"), fetch = FetchType.EAGER)
     @JoinTable(
           name = "events_attendees",
@@ -54,5 +54,5 @@ public class Event {
           inverseJoinColumns = {@JoinColumn(name = "account_id")},
           uniqueConstraints = @UniqueConstraint(columnNames = {"event_id", "account_id"})
     )
-    private Set<Account> attendees;
+    private Set<String> attendees;
 }
