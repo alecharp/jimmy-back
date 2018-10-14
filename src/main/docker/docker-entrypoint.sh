@@ -15,7 +15,7 @@
 # limitations under the License.
 ###
 
-set -euo pipefail
+set -eu pipefail
 
 JAVA_OPTS="-XX:+UseG1GC -Xms1g -Xmx1g -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true"
 

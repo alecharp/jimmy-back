@@ -15,7 +15,7 @@
 # limitations under the License.
 ###
 
-set -euo pipefail
+set -eu pipefail
 
 PORT=${1:-8080}
 STATUS=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:${PORT}/api/actuator/info" || echo 1)
