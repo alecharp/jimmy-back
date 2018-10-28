@@ -45,7 +45,7 @@ public class Security extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http
           .authorizeRequests()
-            .requestMatchers(EndpointRequest.to("info", "health")).permitAll()
+            .requestMatchers(EndpointRequest.to("info", "health")).authenticated()
             .requestMatchers(EndpointRequest.to("metrics")).hasRole("ADMIN")
             .anyRequest().authenticated()
         ;
@@ -59,8 +59,11 @@ public class Security extends KeycloakWebSecurityConfigurerAdapter {
         auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
-    @Bean
-    public KeycloakConfigResolver KeycloakConfigResolver() {
-        return new KeycloakSpringBootConfigResolver();
+    @Configuration
+    public static class KeycloakBeanConfiguration {
+        @Bean
+        public KeycloakConfigResolver KeycloakConfigResolver() {
+            return new KeycloakSpringBootConfigResolver();
+        }
     }
 }

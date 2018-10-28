@@ -1,4 +1,4 @@
-.PHONY: all docker volume db db-stop
+.PHONY: all docker volume db
 
 TAG=latest
 IMAGE=$(USER)/jimmy-back:$(TAG)

@@ -6,8 +6,7 @@ spring:
     password: ${POSTGRES_PASSWORD}
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}/${POSTGRES_DB:jimmy}
   jpa:
-    generate-ddl: true
-    hibernate.ddl-auto: update
+    properties.hibernate.jdbc.lob.non_contextual_creation: true
 management:
   endpoints.web:
     base-path: /api/actuator
@@ -22,11 +21,12 @@ management:
       cache.time-to-live: 15s
     metrics:
       cache.time-to-live: 15s
+
 keycloak:
-  realm: jimmy
+  realm: ${KEYCLOAK_REALM:jimmy}
   principal-attribute: preferred_username
   auth-server-url: ${KEYCLOAK_URL}
-  resource: jimmy-back
+  resource: ${KEYCLOAK_CLIENT_NAME:jimmy-back}
   public-client: true
   bearer-only: true
   cors: true
