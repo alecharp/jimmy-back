@@ -4,9 +4,10 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}/${POSTGRES_DB:jimmy}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:jimmy}
   jpa:
     properties.hibernate.jdbc.lob.non_contextual_creation: true
+    open-in-view: false
 management:
   endpoints.web:
     base-path: /api/actuator
