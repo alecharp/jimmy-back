@@ -1,4 +1,4 @@
-.PHONY: all docker volume db
+.PHONY: all build docker volume db
 
 TAG=latest
 IMAGE=$(USER)/jimmy-back:$(TAG)
@@ -7,12 +7,13 @@ PORT=8181
 DB_VOLUME_NAME:=jimmy-db-data
 DB_CONTAINER_NAME:=jimmy-db
 
-all: docker
+all: build
+build: target/jimmy-back.jar
 
 target/jimmy-back.jar:
 	@./mvnw -V clean package -Dmaven.test.skip=true
 
-docker: target/jimmy-back.jar
+docker: build
 	@docker build -t $(IMAGE) --build-arg PORT=$(PORT) -f src/main/docker/Dockerfile .
 
 volume:
