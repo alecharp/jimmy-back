@@ -16,8 +16,11 @@
 
 package fr.alecharp.jimmy.back.service;
 
+import fr.alecharp.jimmy.back.model.Event;
 import fr.alecharp.jimmy.back.repository.EventRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class EventService {
@@ -25,5 +28,13 @@ public class EventService {
 
     public EventService(EventRepository repository) {
         this.repository = repository;
+    }
+
+    public Iterable<Event> accessibleFor(String username) {
+        return repository.findEventForUser(username);
+    }
+
+    public Optional<Event> create(String ownerUsername, String eventName) {
+        return Optional.of(repository.save(new Event(ownerUsername, eventName)));
     }
 }

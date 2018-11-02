@@ -17,9 +17,18 @@
 package fr.alecharp.jimmy.back.repository;
 
 import fr.alecharp.jimmy.back.model.Event;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EventRepository extends CrudRepository<Event, String> {
+    @Query(
+          nativeQuery = true,
+          value = "SELECT events.id, events.name, events.date, events.owners, events.attendees " +
+                  "FROM events " +
+                  "WHERE jsonb_exists(events.owners, :email) OR jsonb_exists(events.attendees, :email)"
+    )
+    Iterable<Event> findEventForUser(@Param("email") String email);
 }
