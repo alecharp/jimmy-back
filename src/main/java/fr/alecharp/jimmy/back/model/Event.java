@@ -50,7 +50,21 @@ public class Event extends BaseEntity {
         return name;
     }
 
+    public Event setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public LocalDate getDate() {
         return date;
+    }
+
+    public Event setDate(LocalDate date) {
+        this.date = date;
+        return this;
+    }
+
+    public List<String> getOwners() {
+        return owners;
     }
 }

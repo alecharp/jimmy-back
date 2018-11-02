@@ -16,10 +16,17 @@
 
 package fr.alecharp.jimmy.back.http.model;
 
+import java.time.LocalDate;
+
 public class EventCreationRequest {
     private String name;
+    private LocalDate date;
 
     public String getName() {
         return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }

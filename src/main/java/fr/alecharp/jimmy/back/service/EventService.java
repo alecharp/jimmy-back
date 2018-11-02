@@ -37,4 +37,12 @@ public class EventService {
     public Optional<Event> create(String ownerUsername, String eventName) {
         return Optional.of(repository.save(new Event(ownerUsername, eventName)));
     }
+
+    public Optional<Event> update(Event event) {
+        return Optional.of(repository.save(event));
+    }
+
+    public Optional<Event> getEventById(String id) {
+        return repository.findById(id);
+    }
 }
