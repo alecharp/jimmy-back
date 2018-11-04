@@ -10,7 +10,7 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin
 RUN chmod +x /sbin/tini
 
 USER jimmy
-ENV SPRING_PROFILES_ACTIVE prod
+ENV SPRING_PROFILES_ACTIVE production
 
 ARG PORT=8080
 EXPOSE ${PORT}

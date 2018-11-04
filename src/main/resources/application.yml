@@ -2,8 +2,6 @@ server.compression.enabled: true
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:jimmy}
   jpa:
     properties.hibernate.jdbc.lob.non_contextual_creation: true
@@ -24,25 +22,32 @@ management:
       cache.time-to-live: 15s
 
 keycloak:
-  realm: ${KEYCLOAK_REALM:jimmy}
   principal-attribute: preferred_username
-  auth-server-url: ${KEYCLOAK_URL}
-  resource: ${KEYCLOAK_CLIENT_NAME:jimmy-back}
-  public-client: true
   bearer-only: true
-  cors: true
+  ssl-required: "external"
+  confidential-port: 0
 
 ---
 
-spring.profiles: prod
+spring.profiles: production
 server.port: 8080
+spring.datasource:
+  username: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
+keycloak:
+  realm: ${KEYCLOAK_REALM}
+  auth-server-url: ${KEYCLOAK_URL}
+  resource: ${KEYCLOAK_CLIENT_ID}
+
+logging.level:
+  fr.alecharp.jimmy: INFO
 
 ---
 
-spring.profiles: dev
+spring.profiles: development
 server.port: 8181
 logging.level:
-  fr.alecharp: DEBUG
+  fr.alecharp.jimmy: DEBUG
 spring:
   datasource:
     username: jimmy
@@ -54,3 +59,5 @@ spring:
       type: trace
 keycloak:
   auth-server-url: http://localhost:8082/auth
+  realm: jimmy
+  resource: jimmy-back

@@ -16,7 +16,7 @@ target/jimmy-back.jar:
 	@./mvnw -V clean package -Dmaven.test.skip=true
 
 docker: build
-	@docker build -t $(DOCKER_IMAGE) --build-arg PORT=$(DOCKER_PORT) -f src/main/docker/Dockerfile .
+	@docker image build -t $(DOCKER_IMAGE) --build-arg PORT=$(DOCKER_PORT) -f src/main/docker/Dockerfile .
 
 volume:
 	@docker volume create $(DB_VOLUME_NAME)
