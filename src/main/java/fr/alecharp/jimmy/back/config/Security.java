@@ -27,6 +27,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -48,7 +57,7 @@ public class Security extends KeycloakWebSecurityConfigurerAdapter {
             .requestMatchers(EndpointRequest.to("metrics")).hasRole("ADMIN")
             .anyRequest().authenticated()
           .and()
-          .csrf().disable()
+          .addFilterAfter(new CsrfTokenBindingFilter(), CsrfFilter.class)
         ;
         //@formatter:on
     }
@@ -58,5 +67,17 @@ public class Security extends KeycloakWebSecurityConfigurerAdapter {
         KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
+    private static class CsrfTokenBindingFilter extends OncePerRequestFilter {
+        @Override
+        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+            CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+            if(token != null) {
+                response.setHeader("X-CSRF-TOKEN", token.getToken());
+            }
+            filterChain.doFilter(request, response);
+        }
     }
 }

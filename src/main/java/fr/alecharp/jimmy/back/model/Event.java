@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -65,6 +66,6 @@ public class Event extends BaseEntity {
     }
 
     public List<String> getOwners() {
-        return owners;
+        return Collections.unmodifiableList(owners);
     }
 }
