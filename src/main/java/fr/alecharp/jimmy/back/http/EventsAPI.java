@@ -18,6 +18,7 @@ package fr.alecharp.jimmy.back.http;
 
 import fr.alecharp.jimmy.back.http.model.EventCreationRequest;
 import fr.alecharp.jimmy.back.model.Event;
+import fr.alecharp.jimmy.back.model.User;
 import fr.alecharp.jimmy.back.service.EventService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.slf4j.Logger;
@@ -47,15 +48,17 @@ public class EventsAPI {
     }
 
     @GetMapping
-    public Flux<Event> get(@AuthenticationPrincipal KeycloakAuthenticationToken user) {
-        LOG.debug("Getting events for {}", user.getName());
-        return Flux.fromIterable(service.accessibleFor(user.getName()));
+    public Flux<Event> get(@AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken) {
+        User user = User.from(keycloakAuthenticationToken);
+        LOG.debug("Getting events for {}", user.getEmail());
+        return Flux.fromIterable(service.accessibleFor(user.getId()));
     }
 
     @PreAuthorize("hasRole('ROLE_EVENT_PLANNER') || hasRole('ROLE_ADMIN')")
     @PostMapping
-    public Mono<Event> create(@AuthenticationPrincipal KeycloakAuthenticationToken user, @RequestBody EventCreationRequest request) {
-        LOG.debug("Creating new event {} for {}", request.getName(), user.getName());
-        return Mono.justOrEmpty(service.create(user.getName(), request.getName()));
+    public Mono<Event> create(@AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken, @RequestBody EventCreationRequest request) {
+        User user = User.from(keycloakAuthenticationToken);
+        LOG.debug("Creating new event {} for {}", request.getName(), user.getEmail());
+        return Mono.justOrEmpty(service.create(user.getId(), request.getName()));
     }
 }

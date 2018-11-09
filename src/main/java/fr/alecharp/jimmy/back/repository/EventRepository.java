@@ -28,7 +28,7 @@ public interface EventRepository extends CrudRepository<Event, String> {
           nativeQuery = true,
           value = "SELECT events.id, events.name, events.date, events.owners, events.attendees " +
                   "FROM events " +
-                  "WHERE jsonb_exists(events.owners, :email) OR jsonb_exists(events.attendees, :email)"
+                  "WHERE jsonb_exists(events.owners, :userId) OR jsonb_exists(events.attendees, :userId)"
     )
-    Iterable<Event> findEventForUser(@Param("email") String email);
+    Iterable<Event> findEventForUser(@Param("userId") String userId);
 }

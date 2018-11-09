@@ -18,6 +18,7 @@ package fr.alecharp.jimmy.back.http;
 
 import fr.alecharp.jimmy.back.http.model.EventCreationRequest;
 import fr.alecharp.jimmy.back.model.Event;
+import fr.alecharp.jimmy.back.model.User;
 import fr.alecharp.jimmy.back.service.EventService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ import reactor.core.publisher.Mono;
  */
 @RestController
 @RequestMapping(
-      value = "/api/events",
+      value = "/api/events/",
       consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
       produces = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
@@ -42,15 +43,16 @@ public class EventAPI {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EVENT_PLANNER')")
-    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_EVENT_PLANNER')")
+    @PutMapping("{id}")
     public Mono<Event> update(
-          @AuthenticationPrincipal KeycloakAuthenticationToken user,
+          @AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken,
           @PathVariable String id,
           @RequestBody EventCreationRequest request) {
+        User user = User.from(keycloakAuthenticationToken);
         return Mono.justOrEmpty(
               service.getEventById(id)
-                    .filter(event -> event.getOwners().contains(user.getName()))
+                    .filter(event -> event.getOwners().contains(user.getId()))
                     .map(event -> event.setName(request.getName()).setDate(request.getDate()))
                     .flatMap(service::update)
         );
