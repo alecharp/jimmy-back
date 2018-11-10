@@ -54,7 +54,7 @@ public class EventsAPI {
         return Flux.fromIterable(service.accessibleFor(user.getId()));
     }
 
-    @PreAuthorize("hasRole('ROLE_EVENT_PLANNER') || hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_EVENT_PLANNER')")
     @PostMapping
     public Mono<Event> create(@AuthenticationPrincipal KeycloakAuthenticationToken keycloakAuthenticationToken, @RequestBody EventCreationRequest request) {
         User user = User.from(keycloakAuthenticationToken);

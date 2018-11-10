@@ -38,6 +38,10 @@ public class EventService {
         return Optional.of(repository.save(new Event(userId, eventName)));
     }
 
+    public void delete(String eventId) {
+        repository.deleteById(eventId);
+    }
+
     public Optional<Event> update(Event event) {
         return Optional.of(repository.save(event));
     }
