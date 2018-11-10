@@ -18,7 +18,6 @@ package fr.alecharp.jimmy.back.config;
 
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -53,8 +52,6 @@ public class Security extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http
           .authorizeRequests()
-            .requestMatchers(EndpointRequest.to("info", "health")).authenticated()
-            .requestMatchers(EndpointRequest.to("metrics")).hasRole("ADMIN")
             .anyRequest().authenticated()
           .and()
           .addFilterAfter(new CsrfTokenBindingFilter(), CsrfFilter.class)
