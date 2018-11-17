@@ -16,10 +16,10 @@ ARG PORT=8080
 EXPOSE ${PORT}
 
 ENV PORT ${PORT}
-ENTRYPOINT ["/sbin/tini", "-g", "--"]
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/var/jimmy/docker-entrypoint.sh"]
 
 HEALTHCHECK --interval=15s --timeout=2s --retries=3 \
-  CMD sh /var/jimmy/docker-healthcheck.sh ${PORT}
+  CMD ["/var/jimmy/docker-healthcheck.sh", "${PORT}"]
 
 COPY --chown=jimmy:jimmy target/jimmy-back.jar /var/jimmy/jimmy-back.jar

@@ -15,7 +15,10 @@ build: target/jimmy-back.jar
 target/jimmy-back.jar:
 	@./mvnw -V clean package -Dmaven.test.skip=true
 
-docker: build
+docker: target/jimmy-back.jar \
+        src/main/docker/Dockerfile \
+        src/main/docker/docker-entrypoint.sh \
+        src/main/docker/docker-healthcheck.sh
 	@docker image build -t $(DOCKER_IMAGE) --build-arg PORT=$(DOCKER_PORT) -f src/main/docker/Dockerfile .
 
 volume:
