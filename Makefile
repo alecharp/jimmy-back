@@ -28,4 +28,4 @@ db: volume
 		--env-file .postgres-env \
 		--name $(DB_CONTAINER_NAME) \
 		-v $(DB_VOLUME_NAME):/var/lib/postgresql/data \
-		postgres:10.5
+		postgres:10-alpine
