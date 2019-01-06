@@ -39,8 +39,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
-        <keyclock.version>4.4.0.Final</keyclock.version>
+        <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
+        <keyclock.version>4.8.2.Final</keyclock.version>
     </properties>
 
     <licenses>
@@ -50,6 +50,12 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/alecharp/jimmy-back.git</connection>
+        <developerConnection>scm:git:git@github.com:alecharp/jimmy-back.git</developerConnection>
+        <url>https://github.com/alecharp/jimmy-back</url>
+    </scm>
 
     <dependencyManagement>
         <dependencies>
