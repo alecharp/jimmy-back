@@ -16,9 +16,7 @@
 
 package fr.alecharp.jimmy.back.http;
 
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -26,7 +24,7 @@ import reactor.core.publisher.Mono;
 @RestController
 public class PingAPI {
     @GetMapping(value = "/api/ping", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Mono<String> ping(@AuthenticationPrincipal KeycloakAuthenticationToken user) {
-        return Mono.just("Hello " + user.getName());
+    public Mono<String> ping() {
+        return Mono.just("Rock'n Roll!");
     }
 }

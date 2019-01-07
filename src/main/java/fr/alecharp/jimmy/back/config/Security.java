@@ -42,7 +42,7 @@ public class Security extends KeycloakWebSecurityConfigurerAdapter {
 
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new CsrfAuthenticationStrategy(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        return new NullAuthenticatedSessionStrategy();
     }
 
     @Override
