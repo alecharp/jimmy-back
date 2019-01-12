@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ###
 # Copyright (C) 2017 Jimmy
 #
@@ -15,9 +15,12 @@
 # limitations under the License.
 ###
 
-set -eu pipefail
+set -euo pipefail
 
-JAVA_OPTS="-XX:+UseG1GC -Xms1g -Xmx1g -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true"
+JAVA_OPTS="-XX:+UseG1GC \
+  -Xms1g -Xmx1g \
+  -Djava.security.egd=file:/dev/./urandom \
+  -Djava.awt.headless=true"
 
 if [[ $# -gt 0 ]]; then
     exec "$@"
